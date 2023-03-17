@@ -13,3 +13,7 @@ class User(Base):
     password = Column(String(255))
     is_active = Column(Boolean, default=True)
 
+class Post(Base):
+    __tablename__ = "posts"
+    post_id =
+

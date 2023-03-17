@@ -1,2 +1,5 @@
-# fastapi_testproject
-Projecte realitzat a mode de prova de fastapi
+# Friketis
+Projecte realitzat a mode de prova de fastapi en el bootcamp de [Basetis](https://www.basetis.com/)
+
+# UML
+![UML del problema](RESTAPI.drawio.png)
