@@ -9,15 +9,19 @@ def get_post(db: Session, post_id: int):
 
 
 def get_names(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.BasetisNamePost).offset(skip).limit(limit).all()
+    return db.query(models.Post).offset(skip).limit(limit).all()
 
 
 def create_post(db: Session, post: schemas.BasetisNamePostCreate, user: schemas.UserBase):
-    db_post = models.BasetisNamePost(**post.dict(), author=user.username)
+    db_post = models.Post(**post.dict(), author=user.username)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
-    return db_post
+    db_basetisname = models.BasetisNamePost(post_id=db_post.post_id)
+    db.add(db_basetisname)
+    db.commit()
+    db.refresh(db_basetisname)
+    return db_basetisname
 
 def update_post(db: Session, post: schemas.BasetisNamePostCreate, post_id: int):
     db_post = get_post(db, post_id)

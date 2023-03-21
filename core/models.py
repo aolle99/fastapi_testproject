@@ -26,6 +26,8 @@ class Post(Base):
     author = Column(String(16), ForeignKey("users.username"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    comments = relationship("Comment", back_populates="post")
+    images = relationship("PostImage", back_populates="post")
     __mapper_args__ = {
         "polymorphic_identity": "post",
         "polymorphic_on": "type",
@@ -44,9 +46,11 @@ class Comment(Base):
     author = Column(String(16), ForeignKey("users.username"))
     type = Column(Enum(CommentType))
     post_id = Column(Integer, ForeignKey("posts.post_id"))
+    #replies_id = Column(Integer, ForeignKey("comments.comment_id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-
+    post = relationship("Post", back_populates="comments")
+    #replies = relationship("Comment", back_populates="parent")
 
 class PostImage(Base):
     __tablename__ = "post_images"
@@ -55,6 +59,8 @@ class PostImage(Base):
     image = Column(Text())
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    post = relationship("Post", back_populates="images")
+
 
 
 class Platform(Base):
@@ -86,7 +92,7 @@ class Videogame(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
 
-class VideogamePost(Base):
+class VideogamePost(Post):
     __tablename__ = "videogame_posts"
     valoration = Column(Integer)
     post_id = Column(Integer, ForeignKey("posts.post_id"), primary_key=True)
@@ -97,9 +103,9 @@ class VideogamePost(Base):
     }
 
 
-class BasetisNamePost(Base):
+class BasetisNamePost(Post):
     __tablename__ = "basetis_name_posts"
     post_id = Column(Integer, ForeignKey("posts.post_id"), primary_key=True)
     __mapper_args__ = {
-        "polymorphic_identity": "basetis_name",
+        "polymorphic_identity": "basetisname",
     }
