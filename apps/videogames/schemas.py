@@ -1,43 +1,20 @@
+import datetime
+
 from pydantic import BaseModel
 
-from routers.users.schemas import UserBase
-
-class PostImage(BaseModel):
-    image_id: int
-    image: str
-    created_at: str
-    updated_at: str
-class Post(BaseModel):
-    post_id: int
-    title: str
-    description: str
-    type: str
-    author: UserBase
-    created_at: str
-    updated_at: str
-    images: list[PostImage]
-
-class Comment(BaseModel):
-    comment_id: int
-    description: str
-    author: UserBase
-    type: str
-    post_id: int
-    replies: list
-    created_at: str
-    updated_at: str
+from apps.posts.schemas import Post
 
 class Platform(BaseModel):
     platform_id: int
     name: str
-    created_at: str
-    updated_at: str
+    created_at: datetime.datetime
+    updated_at: datetime.datetime | None
 
 class Genre(BaseModel):
     genre_id: int
     name: str
-    created_at: str
-    updated_at: str
+    created_at: datetime.datetime
+    updated_at: datetime.datetime | None
 
 class VideogameBase(BaseModel):
     game_id: int
@@ -55,8 +32,10 @@ class Videogame(VideogameBase):
     updated_at: str
 
 class VideogamePost(Post):
-    videogame: VideogameBase
     valoration: int
-    platform: Platform
+    game_id: int
+    platform_id: int
+
+
 
 

@@ -34,14 +34,3 @@ def delete_post(db: Session, post_id: int):
     db.delete(db_post)
     db.commit()
     return db_post
-
-def upload_post_image(db: Session, image: schemas.PostImageCreate, post_id: int):
-    db_image = models.PostImage(image=image.image, post_id=post_id)
-    db.add(db_image)
-    db.commit()
-    db.refresh(db_image)
-    return db_image
-
-
-def get_current_active_user():
-    return None

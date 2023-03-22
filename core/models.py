@@ -36,7 +36,7 @@ class Post(Base):
     }
 
 
-class CommentType(enum.Enum):
+class CommentType(str, enum.Enum):
     post = "post"
     reply = "reply"
 
@@ -45,14 +45,16 @@ class Comment(Base):
     __tablename__ = "comments"
     comment_id = Column(Integer, primary_key=True, index=True)
     description = Column(Text())
-    author = Column(String(16), ForeignKey("users.username"))
+    author_id = Column(String(16), ForeignKey("users.username"))
     type = Column(Enum(CommentType))
     post_id = Column(Integer, ForeignKey("posts.post_id"))
-    #replies_id = Column(Integer, ForeignKey("comments.comment_id"))
+    replies_id = Column(Integer, ForeignKey("comments.comment_id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     post = relationship("Post", back_populates="comments")
-    #replies = relationship("Comment", back_populates="parent")
+    replies = relationship("Comment")
+    author = relationship("User")
+
 
 class PostImage(Base):
     __tablename__ = "post_images"
@@ -64,7 +66,6 @@ class PostImage(Base):
     post = relationship("Post", back_populates="images")
 
 
-
 class Platform(Base):
     __tablename__ = "platforms"
     platform_id = Column(Integer, primary_key=True, index=True)
@@ -72,12 +73,14 @@ class Platform(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
+
 class Genre(Base):
     __tablename__ = "genres"
     genre_id = Column(Integer, primary_key=True, index=True)
     name = Column(String(127))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
 
 class Videogame(Base):
     __tablename__ = "videogames"
