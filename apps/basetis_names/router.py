@@ -24,11 +24,10 @@ def create_basetisname_post(
     return crud.create_post(db=db, post=post, user=current_user)
 
 
-@router.get("/", response_model=list[schemas.Post])
+
+@router.get("/", response_model=list[schemas.BasetisNamePost])
 def read_basetisname_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    asd = crud.get_names(db, skip=skip, limit=limit)
-    print(asd[0])
-    return asd
+    return crud.get_names(db, skip=skip, limit=limit)
 
 
 @router.get("/{post_id}", response_model=schemas.BasetisNamePost)
@@ -46,20 +45,19 @@ def update_basetisname_post(
     db_post = crud.get_post(db, post_id)
     if db_post is None:
         raise HTTPException(status_code=404, detail="Post not found")
-    if db_post.author != current_user.username:
+    if db_post.author_id != current_user.username:
         raise HTTPException(status_code=403, detail="You are not the author of this post")
 
     return crud.update_post(db, post, post_id)
 
 
-@router.delete("/{post_id}", response_model=schemas.BasetisNamePost)
+@router.delete("/{post_id}", status_code=204)
 def delete_basetisname_post(post_id: int, current_user: Annotated[user_schema.User, Depends(get_current_active_user)], db: Session = Depends(get_db)):
     db_post = crud.get_post(db, post_id)
     if db_post is None:
         raise HTTPException(status_code=404, detail="Post not found")
-    if db_post.author != current_user.username:
+    if db_post.author_id != current_user.username:
         raise HTTPException(status_code=403, detail="You are not the author of this post")
-    return crud.delete_post(db, post_id)
 
 
 @router.post("/{post_id}/images", response_model=schemas.PostImage, status_code=201)
@@ -72,6 +70,6 @@ def upload_basetisname_post_image(
     db_post = crud.get_post(db, post_id)
     if db_post is None:
         raise HTTPException(status_code=404, detail="Post not found")
-    if db_post.author != current_user.username:
+    if db_post.author_id != current_user.username:
         raise HTTPException(status_code=403, detail="You are not the author of this post")
     return crud.upload_post_image(db, image, post_id)

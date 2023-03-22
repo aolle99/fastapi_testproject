@@ -9,9 +9,11 @@ class PostImage(BaseModel):
     image_id: int
     post_id: int
     image: str
-    created_at: str
-    updated_at: str
+    created_at: datetime.datetime
+    updated_at: datetime.datetime | None
 
+    class Config:
+        orm_mode = True
 
 
 
@@ -43,7 +45,7 @@ class Post(BaseModel):
     title: str
     description: str
     type: str
-    author: str
+    author: User
     created_at: datetime.datetime
     updated_at: datetime.datetime | None
     #images: list[PostImage]
@@ -63,7 +65,7 @@ class BasetisNamePost(Post):
 
 
 class BasetisNamePostCreate(PostCreate):
-    type: str = "basetisname"
+    pass
 
 
 class PostImageCreate(BaseModel):

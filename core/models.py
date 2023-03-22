@@ -15,6 +15,7 @@ class User(Base):
     email = Column(String(255), unique=True, index=True)
     password = Column(Text)
     is_active = Column(Boolean, default=True)
+    posts = relationship("Post", back_populates="author")
 
 
 class Post(Base):
@@ -23,11 +24,12 @@ class Post(Base):
     title = Column(String(127))
     description = Column(Text())
     type = Column(String(16))
-    author = Column(String(16), ForeignKey("users.username"))
+    author_id = Column(String(16), ForeignKey("users.username"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     comments = relationship("Comment", back_populates="post")
     images = relationship("PostImage", back_populates="post")
+    author = relationship("User", back_populates="posts")
     __mapper_args__ = {
         "polymorphic_identity": "post",
         "polymorphic_on": "type",
