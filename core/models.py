@@ -95,6 +95,8 @@ class Videogame(Base):
     platform_id = Column(Integer, ForeignKey("platforms.platform_id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    genres = relationship("Genre")
+    platforms = relationship("Platform")
 
 
 class VideogamePost(Post):
@@ -106,6 +108,8 @@ class VideogamePost(Post):
     __mapper_args__ = {
         "polymorphic_identity": "videogame",
     }
+    games = relationship("Videogame")
+    platform = relationship("Platform")
 
 
 class BasetisNamePost(Post):

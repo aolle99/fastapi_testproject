@@ -3,3 +3,5 @@ Projecte realitzat a mode de prova de fastapi en el bootcamp de [Basetis](https:
 
 # UML
 ![UML del problema](RESTAPI.drawio.png)
+
+Dataset de [Kaggle](https://www.kaggle.com/datasets/luismartingrados/videogames)

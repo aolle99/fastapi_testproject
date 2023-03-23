@@ -19,6 +19,7 @@ def create_post(db: Session, post: schemas.BasetisNamePostCreate, user: schemas.
     db.refresh(db_basetisname)
     return db_basetisname
 
+
 def update_post(db: Session, post: schemas.BasetisNamePostCreate, post_id: int):
     db_post = get_post(db, post_id)
     db_post.title = post.title
@@ -26,6 +27,7 @@ def update_post(db: Session, post: schemas.BasetisNamePostCreate, post_id: int):
     db.commit()
     db.refresh(db_post)
     return db_post
+
 
 def delete_post(db: Session, post_id: int):
     db_post = get_post(db, post_id)
